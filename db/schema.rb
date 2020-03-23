@@ -16,8 +16,8 @@ ActiveRecord::Schema.define(version: 2020_03_23_221931) do
   enable_extension "plpgsql"
 
   create_table "guesses", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "item_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "item_id", null: false
     t.string "guessed_category"
     t.boolean "correct"
     t.datetime "created_at", precision: 6, null: false
@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 2020_03_23_221931) do
 
   create_table "items", force: :cascade do |t|
     t.string "name"
-    t.string "type"
+    t.string "general_type"
     t.string "subcategory"
     t.string "note"
     t.datetime "created_at", precision: 6, null: false
