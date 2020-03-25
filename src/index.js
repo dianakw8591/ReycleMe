@@ -15,12 +15,23 @@ document.addEventListener("DOMContentLoaded", function() {
     header = document.querySelector("header");
     main = document.querySelector("main");
     createHomePage();
-    // buildUserRegisterForm();
-    // buildUserEditForm();
-    // buildUserDeleteAction();
+
+});
+
+function makeThePage() {
+    //all the functions go in here
+    //item search function
+    //logout button
+    //edit button
+    //delete button
+    //stats 
+
+    buildUserEditForm();
+    buildUserDeleteAction();
+    buildUserLogout();
     // getStats();
     // buildItemForm();
-});
+}
 
 function buildLoginButton() {
     const button = document.createElement("button");
@@ -114,6 +125,9 @@ function buildUserLoginForm () {
             const userdiv = document.createElement("div");
             userdiv.innerText = `Welcome back ${json.data.attributes.username}!`
             main.appendChild(userdiv);
+            //can modify the above
+
+            makeThePage()
         })
 
     })
@@ -203,13 +217,16 @@ function buildUserSignupForm() {
         })
         .then(resp => resp.json())
         .then(function(json) {
-            console.log(json)
             main.removeChild(signupDiv);
             user_id = json.data.id;
             const userdiv = document.createElement("div");
             userdiv.innerText = `Welcome ${json.data.attributes.username}!`
             main.appendChild(userdiv);
+            //can modify the above
+
+            makeThePage()
         })
+
 
     })
 
@@ -217,7 +234,7 @@ function buildUserSignupForm() {
 
 
 function buildUserEditForm() {
-    const editDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
+    //const editDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
     const editButton = document.createElement("button");
     editButton.innerText = "Edit"
     editButton.addEventListener("click", function() {
@@ -245,25 +262,45 @@ function buildUserEditForm() {
 
     })
 
-    editDiv.appendChild(editButton);
+    main.appendChild(editButton);
 }
 
 function buildUserDeleteAction () {
-    const deleteDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
-    const delteButton = document.createElement("button")
+    // const deleteDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
+    const deleteButton = document.createElement("button")
     deleteButton.innerText = "Delete"
     deleteButton.addEventListener("click", function() {
         deleteUser();
     })
   
-    deleteDiv.appendChild(deleteButton);
+    main.appendChild(deleteButton);
 }
 
 function deleteUser() {
-    fetch(USER_URL, {
+    fetch(BASE_URL + user_id, {
         method: "DELETE"
     })
-    .then(buildUserSignupForm) //double check this function matches function Diana is building
+    .then( response =>  
+        {deleteChildren(main), 
+        createHomePage(); 
+    })
+} 
+
+function buildUserLogout() {
+    // const deleteDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
+    const logoutButton = document.createElement("button")
+    logoutButton.innerText = "Logout"
+    logoutButton.addEventListener("click", function() {
+        logOut();
+    })
+  
+    main.appendChild(logoutButton);
+}
+
+function logOut() {
+    deleteChildren(main);
+    createHomePage();
+    user_id = null
 }
 
 function getStats() {
