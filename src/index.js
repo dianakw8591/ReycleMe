@@ -302,22 +302,8 @@ function buildItemForm() {
 }
 
 function createHomePage() {
-<<<<<<< HEAD
-    const homePage = documnent.getElementById("homepage");
-    const login = documnent.createElement("button");
-    const newUser = documnent.createElement("button");
-    login.addEventListener('click', () => {
-
-    })
-    newUser.addEventListener('click', () => {
-        
-    })
-    homePage.appendChild(login);
-    homePage.appendChild(newUser);
-=======
     buildLoginButton();
     buildSignupButton();   
->>>>>>> a505d642e71641c7c43df9b14e6481b82cead248
 }
 
 function deleteChildren(parent) {
