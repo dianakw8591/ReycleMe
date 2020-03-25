@@ -58,3 +58,20 @@ function buildItemForm() {
 
 }
 
+function createHomePage() {
+    const homePage = documnent.getElementById("homepage");
+    const login = documnent.createElement("button");
+    const newUser = documnent.createElement("button");
+    // button code
+    homePage.appendChild(login);
+    homePage.appendChild(newUser);
+}
+
+function deleteChildren(parent) {
+    let child = parent.lastElementChild;
+    while (child) {
+        parent.removeChild(child);
+        child = parent.lastElementChild;
+    }
+}
+
