@@ -218,6 +218,7 @@ function buildUserSignupForm() {
         .then(resp => resp.json())
         .then(function(json) {
             main.removeChild(signupDiv);
+            console.log(json)
             user_id = json.data.id;
             const userdiv = document.createElement("div");
             userdiv.id = 'userdiv';
