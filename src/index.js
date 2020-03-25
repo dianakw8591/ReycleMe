@@ -220,6 +220,7 @@ function buildUserSignupForm() {
             main.removeChild(signupDiv);
             user_id = json.data.id;
             const userdiv = document.createElement("div");
+            userdiv.id = 'userdiv';
             userdiv.innerText = `Welcome ${json.data.attributes.username}!`
             main.appendChild(userdiv);
             //can modify the above
@@ -257,13 +258,32 @@ function buildUserEditForm() {
         editForm.appendChild(editSubmit)
 
         editForm.addEventListener("submit", function(event) {
-            //call a function to edit
+            event.preventDefault();
+
+            editUser();
         })
 
     })
 
     main.appendChild(editButton);
 }
+
+function editUser() {
+    fetch(BASE_URL + user_id, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify({user: userObj})
+    })
+    .then(resp => resp.json())
+    .then(function(json) {
+        const userdiv = document.getElementById("userdiv");
+        userdiv.innerText = `Welcome back ${json.data.attributes.username}!`
+    })
+} 
+
 
 function buildUserDeleteAction () {
     // const deleteDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
