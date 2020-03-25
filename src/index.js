@@ -62,7 +62,12 @@ function createHomePage() {
     const homePage = documnent.getElementById("homepage");
     const login = documnent.createElement("button");
     const newUser = documnent.createElement("button");
-    // button code
+    login.addEventListener('click', () => {
+
+    })
+    newUser.addEventListener('click', () => {
+        
+    })
     homePage.appendChild(login);
     homePage.appendChild(newUser);
 }
