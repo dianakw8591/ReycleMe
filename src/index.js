@@ -243,11 +243,14 @@ function showStats(data) {
             correct.push(stat)
         }
     })
-    const correctcount = documnent.getElementById("INPUT CORRECT ELEMENT ID");
-    const incorrectcount = documnent.getElementById("INPUT CORRECT ELEMENT ID");
+    const analyticsBox = documnent.getElementById("analytics");
+    const correctcount = documnent.createElement("h3");
+    const incorrectcount = documnent.createElement("h3");
 
     correctcount.innerText = correct.length;
     incorrectcount.innerText = incorrect.length;
+    analyticsBox.appendChild(correctcount);
+    analyticsBox.appendChild(incorrectcount);
 }
 
 function buildItemForm() {
