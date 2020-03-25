@@ -6,7 +6,7 @@ class Api::V1::UsersController < ApplicationController
                 render json: UserSerializer.new(new_user)
                   
             else
-                render json: new_user.errors, status: :unprocessable_entity
+                render json: {message: new_user.errors.full_messages, status: :unprocessable_entity}
             end
         else
             render json: {message: "Password and Password Confirmation do not match. Please try again."}

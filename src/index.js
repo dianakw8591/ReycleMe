@@ -64,7 +64,8 @@ function buildUserLoginForm () {
 
     const username = document.createElement("input");
     username.type = 'text';
-    username.name = 'username'
+    username.name = 'username';
+    username.placeholder= "Enter name"; 
     loginform.appendChild(username);
 
     let linebreak = document.createElement("br");
@@ -77,6 +78,7 @@ function buildUserLoginForm () {
     const password = document.createElement("input");
     password.type = 'password';
     password.name = 'password'
+    password.placeholder= "Enter password"; 
     loginform.appendChild(password);
 
     linebreak = document.createElement("br");
@@ -109,24 +111,19 @@ function buildUserLoginForm () {
         })
         .then(resp => resp.json())
         .then(function(json) {
+            if (json.message) {
+                alert(json.message)
+            } else {
             main.removeChild(loginDiv);
             user_id = json.data.id;
             const userdiv = document.createElement("div");
             userdiv.innerText = `Welcome back ${json.data.attributes.username}!`
             main.appendChild(userdiv);
+            }
         })
-
     })
-
 }
 
-{/* <div id="edit">
-        <form id="login-form" action="">
-            <h3>Welcome back to RecycleMe</h3>
-            <input type="submit" value="Edit Your Account" /><br />
-            <input type="submit" value="Delete Your Account" /><br />
-          </form>
-    </div> */}
 
 function buildUserSignupForm() {
     const signupDiv = document.createElement("div");
@@ -145,6 +142,7 @@ function buildUserSignupForm() {
     const username = document.createElement("input");
     username.type = 'text';
     username.name = 'username'
+    username.placeholder= "Enter a username"; 
     signupform.appendChild(username);
 
     let linebreak = document.createElement("br");
@@ -157,6 +155,7 @@ function buildUserSignupForm() {
     const password = document.createElement("input");
     password.type = 'password';
     password.name = 'password'
+    password.placeholder= "Enter password"; 
     signupform.appendChild(password);
 
     linebreak = document.createElement("br");
@@ -169,6 +168,7 @@ function buildUserSignupForm() {
     const passwordconfirm = document.createElement("input");
     passwordconfirm.type = 'password';
     passwordconfirm.name = 'password_confirmation'
+    passwordconfirm.placeholder= "Confirm password"; 
     signupform.appendChild(passwordconfirm);
 
     linebreak = document.createElement("br");
@@ -203,16 +203,17 @@ function buildUserSignupForm() {
         })
         .then(resp => resp.json())
         .then(function(json) {
-            console.log(json)
+            if (json.message) {
+                alert(json.message)
+            } else {
             main.removeChild(signupDiv);
             user_id = json.data.id;
             const userdiv = document.createElement("div");
             userdiv.innerText = `Welcome ${json.data.attributes.username}!`
             main.appendChild(userdiv);
+            }
         })
-
     })
-
 }
 
 
