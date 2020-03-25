@@ -3,7 +3,7 @@ class Api::V1::UsersController < ApplicationController
         if user_params[:password_confirmation] == user_params[:password]
             new_user = User.create(user_params)
             if new_user.valid?
-                render json: new_user
+                render json: UserSerializer.new(new_user)
                   
             else
                 render json: new_user.errors, status: :unprocessable_entity
@@ -16,7 +16,10 @@ class Api::V1::UsersController < ApplicationController
     def login
         user = User.find_by(username: user_params[:username])
         if user && user.authenticate(user_params[:password])
-            render json: user
+            options = {
+                include: [:guesses]
+              }
+            render json: UserSerializer.new(user, options)
         else
             render json: {message: "Incorrect username or password"}
         end
