@@ -12,8 +12,7 @@ let user_id = null;
 document.addEventListener("DOMContentLoaded", function() {
     header = document.querySelector("header");
     main = document.querySelector("main");
-    buildLoginButton();
-    buildSignupButton();
+    createHomePage();
     // buildUserRegisterForm();
     // buildUserEditForm();
     // buildUserDeleteAction();
@@ -258,12 +257,8 @@ function buildItemForm() {
 }
 
 function createHomePage() {
-    const homePage = documnent.getElementById("homepage");
-    const login = documnent.createElement("button");
-    const newUser = documnent.createElement("button");
-    // button code
-    homePage.appendChild(login);
-    homePage.appendChild(newUser);
+    buildLoginButton();
+    buildSignupButton();   
 }
 
 function deleteChildren(parent) {
