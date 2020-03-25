@@ -2,12 +2,14 @@ const BASE_URL = "http://localhost:3000/api/v1/"
 const LOGIN_URL = BASE_URL + "login"
 const SIGNUP_URL = BASE_URL + "users"
 const ITEMS_URL = "PLACE URL HERE";
-const STATS_URL = "guesses";
+const STATS_URL = "PLACE URL HERE";
 const USERS_URL = "PLACE URL HERE";
 
 let header = null;
 let main = null;
 let user_id = null;
+
+const USER_URL = `localhost:3000/api/v1/${user_id}`;
 
 document.addEventListener("DOMContentLoaded", function() {
     header = document.querySelector("header");
@@ -213,12 +215,55 @@ function buildUserSignupForm() {
 
 }
 
+
 function buildUserEditForm() {
-    const user_name = document.getElementById("INPUT CORRECT ELEMENT ID")
+    const editDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
+    const editButton = document.createElement("button");
+    editButton.innerText = "Edit"
+    editButton.addEventListener("click", function() {
+        const editForm = document.createElement("form")
+        editForm.setAttribute("method", "patch");
+        const header = document.createElement("h3")
+        header.innerText = "Update Your Information"
+        const nameLabel = document.createElement("label")
+        nameLabel.innerText = "Name :"
+        const nameField = document.createElement("inut")
+        nameField.name = "userName"
+        const editSubmit = document.createElement("button")
+        editSubmit.type = "submit"
+        editSubmit.innerText = "Update Information"
+
+
+        editForm.appendChild(header)
+        editForm.appendChild(nameLabel)
+        editForm.appendChild(nameField)
+        editForm.appendChild(editSubmit)
+
+        editForm.addEventListener("submit", function(event) {
+            //call a function to edit
+        })
+
+    })
+
+    editDiv.appendChild(editButton);
 }
 
-function buildUserDeleteAction() {
+function buildUserDeleteAction () {
+    const deleteDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
+    const delteButton = document.createElement("button")
+    deleteButton.innerText = "Delete"
+    deleteButton.addEventListener("click", function() {
+        deleteUser();
+    })
+  
+    deleteDiv.appendChild(deleteButton);
+}
 
+function deleteUser() {
+    fetch(USER_URL, {
+        method: "DELETE"
+    })
+    .then(buildUserSignupForm) //double check this function matches function Diana is building
 }
 
 function getStats() {
