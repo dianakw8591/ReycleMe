@@ -42,6 +42,12 @@ function makeThePage() {
     // buildItemForm();
 }
 
+function addHeaderTitle() {
+    const title = document.createElement('h2');
+    title.innerText = 'Welcome to RecycleMe';
+    header.appendChild(title);
+}
+
 function buildLoginButton() {
     const button = document.createElement("button");
     button.id = "login";
@@ -51,7 +57,9 @@ function buildLoginButton() {
         deleteChildren(search);
         buildUserLoginForm();
         deleteChildren(header);
+        addHeaderTitle()
         buildSignupButton();
+
     })
     
 }
@@ -65,6 +73,7 @@ function buildSignupButton() {
         deleteChildren(search);
         buildUserSignupForm();
         deleteChildren(header);
+        addHeaderTitle()
         buildLoginButton();
     })
     
@@ -404,8 +413,10 @@ function createHomePage() {
     deleteChildren(results);
     stats.style.display = 'none';
     footer.style.display = 'none'
+    addHeaderTitle();
     buildLoginButton();
     buildSignupButton();   
+    
 }
 
 function deleteChildren(parent) {
