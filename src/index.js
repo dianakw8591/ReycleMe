@@ -123,6 +123,7 @@ function buildUserLoginForm () {
             main.removeChild(loginDiv);
             user_id = json.data.id;
             const userdiv = document.createElement("div");
+            userdiv.id = "userDiv"
             userdiv.innerText = `Welcome back ${json.data.attributes.username}!`
             main.appendChild(userdiv);
             //can modify the above
@@ -220,6 +221,7 @@ function buildUserSignupForm() {
             main.removeChild(signupDiv);
             user_id = json.data.id;
             const userdiv = document.createElement("div");
+            userdiv.id = "userDiv"
             userdiv.innerText = `Welcome ${json.data.attributes.username}!`
             main.appendChild(userdiv);
             //can modify the above
@@ -239,12 +241,11 @@ function buildUserEditForm() {
     editButton.innerText = "Edit"
     editButton.addEventListener("click", function() {
         const editForm = document.createElement("form")
-        editForm.setAttribute("method", "patch");
         const header = document.createElement("h3")
         header.innerText = "Update Your Information"
         const nameLabel = document.createElement("label")
-        nameLabel.innerText = "Name :"
-        const nameField = document.createElement("inut")
+        nameLabel.innerText = "Name : "
+        const nameField = document.createElement("input")
         nameField.name = "userName"
         const editSubmit = document.createElement("button")
         editSubmit.type = "submit"
@@ -255,14 +256,50 @@ function buildUserEditForm() {
         editForm.appendChild(nameLabel)
         editForm.appendChild(nameField)
         editForm.appendChild(editSubmit)
+        main.appendChild(editForm)
 
         editForm.addEventListener("submit", function(event) {
-            //call a function to edit
+            event.preventDefault();
+            editUser(event);
+            main.removeChild(editForm)
         })
-
     })
 
     main.appendChild(editButton);
+}
+
+function editUser(event) {
+    console.log(event.target.userName.value)
+    let updatedData = {username: event.target.userName.value}
+    fetch(BASE_URL + "users/" + user_id, {
+        method: "PUT",
+        // mode: "no-cors",
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json' 
+        },
+        body: JSON.stringify(updatedData)
+    })
+    .then(res => res.json())
+    .then (json => {
+        console.log(json)
+        document.getElementById("userDiv").innerText = `Welcome ${json.data.attributes.username}!`
+    })
+
+    // fetch(BASE_URL + user_id, {
+    //     method: "PATCH",
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //         "Accept": "application/json"
+    //     },
+    //     body: JSON.stringify({user: userObj})
+    // })
+    // .then(resp => resp.json())
+    // .then(function(json) {
+    //     const userdiv = document.getElementById("userDiv");
+    //     userdiv.innerText = `Welcome back ${json.data.attributes.username}!`
+    // })
+
 }
 
 function buildUserDeleteAction () {
