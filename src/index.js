@@ -38,9 +38,10 @@ function buildLoginButton() {
     button.innerText = "Login"
     header.appendChild(button)
     button.addEventListener("click", function() {
+        deleteChildren(main);
         buildUserLoginForm();
-        header.removeChild(button)
-        header.removeChild(document.getElementById("signup"))
+        deleteChildren(header);
+        buildSignupButton();
     })
     
 }
@@ -51,9 +52,10 @@ function buildSignupButton() {
     button.innerText = "Signup"
     header.appendChild(button)
     button.addEventListener("click", function() {
+        deleteChildren(main);
         buildUserSignupForm();
-        header.removeChild(button);
-        header.removeChild(document.getElementById("login"))
+        deleteChildren(header);
+        buildLoginButton();
     })
     
 }
@@ -62,10 +64,13 @@ function buildUserLoginForm () {
     const loginDiv = document.createElement("div");
     loginDiv.id = "login-div";
 
+    const loginError = document.createElement("div");
+    loginError.id = "login-error";
+
     const h3 = document.createElement("h3");
     h3.innerText = "Please login";
 
-    const loginform =document.createElement("form");
+    const loginform = document.createElement("form");
     loginform.id = "login-form";
 
     const namelabel = document.createElement("label");
@@ -100,6 +105,7 @@ function buildUserLoginForm () {
     
     loginDiv.appendChild(h3);
     loginDiv.appendChild(loginform);
+    loginDiv.appendChild(loginError);
 
     main.appendChild(loginDiv);
 
@@ -121,8 +127,9 @@ function buildUserLoginForm () {
         })
         .then(resp => resp.json())
         .then(function(json) {
+            loginError.innerText = '';
             if (json.message) {
-                alert(json.message)
+                loginError.innerText = json.message;
             } else {
             main.removeChild(loginDiv);
             user_id = json.data.id;
@@ -141,6 +148,9 @@ function buildUserLoginForm () {
 function buildUserSignupForm() {
     const signupDiv = document.createElement("div");
     signupDiv.id = "signup-div";
+
+    const signupError = document.createElement("div");
+    signupError.id = "signup-error";
 
     const h3 = document.createElement("h3");
     h3.innerText = "Please Sign-up";
@@ -193,6 +203,7 @@ function buildUserSignupForm() {
 
     signupDiv.appendChild(h3);
     signupDiv.appendChild(signupform);
+    signupDiv.appendChild(signupError);
 
     main.appendChild(signupDiv);
 
@@ -216,8 +227,13 @@ function buildUserSignupForm() {
         })
         .then(resp => resp.json())
         .then(function(json) {
+            deleteChildren(signupError)
             if (json.message) {
-                alert(json.message)
+                for (const message of json.message) {
+                    const error = document.createElement('div')
+                    error.innerText = message;
+                    signupError.appendChild(error);
+                };
             } else {
             main.removeChild(signupDiv);
             user_id = json.data.id;
