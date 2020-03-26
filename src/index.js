@@ -249,25 +249,29 @@ function buildUserEditForm() {
         const editSubmit = document.createElement("button")
         editSubmit.type = "submit"
         editSubmit.innerText = "Update Information"
+        const errorMessage = document.createElement("div")
+        errorMessage.id = 'edit_user_error'
 
 
         editForm.appendChild(header)
         editForm.appendChild(nameLabel)
         editForm.appendChild(nameField)
         editForm.appendChild(editSubmit)
+        editForm.appendChild(errorMessage)
         main.appendChild(editForm)
 
         editForm.addEventListener("submit", function(event) {
             event.preventDefault();
-            editUser(event);
-            main.removeChild(editForm)
+            editUser(event, editForm);
         })
     })
 
     main.appendChild(editButton);
 }
 
-function editUser(event) {
+function editUser(event, editForm) {
+    let errorDiv = document.getElementById('edit_user_error');
+    errorDiv.innerText = '';
     let updatedData = {username: event.target.userName.value}
     fetch(BASE_URL + "users/" + user_id, {
         method: "PUT",
@@ -281,8 +285,9 @@ function editUser(event) {
     .then(res => res.json())
     .then (json => {
         if (json.message) {
-            alert(json.message)
+            errorDiv.innerText = json.message;
         } else {
+            main.removeChild(editForm)
             document.getElementById("userDiv").innerText = `Welcome ${json.data.attributes.username}!`
         }
     })
