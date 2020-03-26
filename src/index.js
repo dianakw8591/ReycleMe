@@ -9,8 +9,6 @@ let header = null;
 let main = null;
 let user_id = null;
 
-const USER_URL = `localhost:3000/api/v1/${user_id}`;
-
 document.addEventListener("DOMContentLoaded", function() {
     header = document.querySelector("header");
     main = document.querySelector("main");
@@ -29,7 +27,8 @@ function makeThePage() {
     buildUserEditForm();
     buildUserDeleteAction();
     buildUserLogout();
-    // getStats();
+    getStats();
+    
     // buildItemForm();
 }
 
@@ -304,7 +303,7 @@ function logOut() {
 }
 
 function getStats() {
-    fetch(ITEMS_URL)
+    fetch(`${SIGNUP_URL}/${user_id}/guesses`)
     .then(function(res) {
         return res.json();
     })
@@ -314,24 +313,32 @@ function getStats() {
 }
 
 function showStats(data) {
-    let correct = []
-    let incorrect = []
-    data.forEach(stat => {
-        //just a guess at the moment. Need to determine what structure this will be
-        if (stat.correct == false) {
-            incorrect.push(stat)
-        } else {
-            correct.push(stat)
-        }
-    })
-    const analyticsBox = documnent.getElementById("analytics");
-    const correctcount = documnent.createElement("h3");
-    const incorrectcount = documnent.createElement("h3");
+    // let correct = []
+    // let incorrect = []
+    // data.forEach(stat => {
+    //     //just a guess at the moment. Need to determine what structure this will be
+    //     if (stat.correct == false) {
+    //         incorrect.push(stat)
+    //     } else {
+    //         correct.push(stat)
+    //     }
+    // })
+    const analyticsBox = document.createElement("div");
+    const h1 = document.createElement("h1");
+    h1.innerText = "Your guesses so far:"
 
-    correctcount.innerText = correct.length;
-    incorrectcount.innerText = incorrect.length;
+    const correctcount = document.createElement("h3");
+    correctcount.innerText = `Correct: ${data.correct}`;
+
+    const incorrectcount = document.createElement("h3");
+    incorrectcount.innerText = `Incorrect: ${data.incorrect}`;
+
+    
+    analyticsBox.appendChild(h1);
     analyticsBox.appendChild(correctcount);
     analyticsBox.appendChild(incorrectcount);
+
+    main.appendChild(analyticsBox);
 }
 
 function buildItemForm() {

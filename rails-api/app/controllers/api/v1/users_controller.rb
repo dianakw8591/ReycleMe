@@ -16,13 +16,16 @@ class Api::V1::UsersController < ApplicationController
     def login
         user = User.find_by(username: user_params[:username])
         if user && user.authenticate(user_params[:password])
-            options = {
-                include: [:guesses]
-              }
-            render json: UserSerializer.new(user, options)
+            render json: UserSerializer.new(user)
         else
             render json: {message: "Incorrect username or password"}
         end
+    end
+
+    def guesses
+        user = User.find(params[:id])
+        guess_count = user.guesses_count
+        render json: guess_count
     end
 
     private
