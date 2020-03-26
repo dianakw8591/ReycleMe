@@ -46,7 +46,7 @@ function buildLoginButton() {
     const button = document.createElement("button");
     button.id = "login";
     button.innerText = "Login"
-    header.appendChild(button)
+    document.querySelector(".header-buttons").appendChild(button)
     button.addEventListener("click", function() {
         deleteChildren(search);
         buildUserLoginForm();
@@ -60,7 +60,7 @@ function buildSignupButton() {
     const button = document.createElement("button");
     button.id = "signup";
     button.innerText = "Signup"
-    header.appendChild(button)
+    document.querySelector(".header-buttons").appendChild(button)
     button.addEventListener("click", function() {
         deleteChildren(search);
         buildUserSignupForm();

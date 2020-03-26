@@ -8,25 +8,39 @@
     height: 100vh;
     }
     
-    .header { 
-        grid-area: 1 / 1 / 3 / 5;
-        background-color: green; }
+.header { 
+    grid-area: 1 / 1 / 3 / 5;
+    background-color: green; }
 
-    h2 {
-        padding: 10px;
-        font-family: monospace;
-    }
+h2 {
+    padding: 10px;
+    font-family: monospace;
+}
 
-    .stats { grid-area: 3 / 1 / 7 / 2; 
-            background: beige;
-            display: none;
-            }
+button {
+    border-radius: 8px;
+    font-size: 18px;
+    background-color: rgba(148, 148, 148, 0.966);
+}
 
-    .search { grid-area: 3 / 2 / 5 / 5; }
+.header-buttons {
+    text-align: center;
+}
 
-    .results { grid-area: 3 / 2 / 5 / 5;  }
+.header-buttons button{
+    margin: 20px;
+}
 
-    .footer { grid-area: 7 / 1 / 8 / 5;  
-            background-color: rgba(51, 175, 175, 0.5);
-            display: none;
+.stats { grid-area: 3 / 1 / 7 / 2; 
+        background: beige;
+        display: none;
         }
+
+.search { grid-area: 3 / 2 / 5 / 5; }
+
+.results { grid-area: 3 / 2 / 5 / 5;  }
+
+.footer { grid-area: 7 / 1 / 8 / 5;  
+        background-color: rgb(160, 146, 100);
+        display: none;
+    }
