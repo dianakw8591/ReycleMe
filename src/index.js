@@ -24,15 +24,38 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
+function createHomePage() {
+    user_id = null;
+    deleteChildren(header);
+    deleteChildren(search);
+    deleteChildren(stats);
+    deleteChildren(footer);
+    deleteChildren(results);
+    stats.style.display = 'none';
+    footer.style.display = 'none'
+    addHeaderTitle();
+    buildLoginButton();
+    buildSignupButton();   
+    
+}
+
+function addHeaderTitle() {
+    const title = document.createElement('h2');
+    title.innerText = 'Welcome to RecycleMe';
+    header.appendChild(title);
+    const div = document.createElement('div');
+    div.className ='header-buttons';
+    header.appendChild(div);
+}
+
 function makeThePage() {
     stats.style.display = 'block';
     footer.style.display = 'block';
+    deleteChildren(header);
+    addHeaderTitle();
     //all the functions go in here
     //item search function
-    //logout button
-    //edit button
-    //delete button
-    //stats 
+    
 
     buildUserEditForm();
     buildUserDeleteAction();
@@ -42,11 +65,6 @@ function makeThePage() {
     // buildItemForm();
 }
 
-function addHeaderTitle() {
-    const title = document.createElement('h2');
-    title.innerText = 'Welcome to RecycleMe';
-    header.appendChild(title);
-}
 
 function buildLoginButton() {
     const button = document.createElement("button");
@@ -294,8 +312,7 @@ function buildUserEditForm() {
         search.appendChild(editForm)
         editForm.addEventListener("submit", function(event) {
             event.preventDefault();
-            editUser(event);
-            search.removeChild(editForm)
+            editUser(event, editForm);
         })
     })
 
@@ -320,8 +337,8 @@ function editUser(event, editForm) {
         if (json.message) {
             errorDiv.innerText = json.message;
         } else {
-            search.removeChild(editForm)
-            document.getElementById("userDiv").innerText = `Welcome ${json.data.attributes.username}!`
+            search.removeChild(editForm);
+            document.getElementById("userDiv").innerText = `Welcome ${json.data.attributes.username}!`;
         }
     })
 }
@@ -405,19 +422,6 @@ function buildItemForm() {
 
 }
 
-function createHomePage() {
-    user_id = null;
-    deleteChildren(search);
-    deleteChildren(stats);
-    deleteChildren(footer);
-    deleteChildren(results);
-    stats.style.display = 'none';
-    footer.style.display = 'none'
-    addHeaderTitle();
-    buildLoginButton();
-    buildSignupButton();   
-    
-}
 
 function deleteChildren(parent) {
     let child = parent.lastElementChild;
