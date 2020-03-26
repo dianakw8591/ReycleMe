@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-    has_many :guesses
+    has_many :guesses, dependent: :destroy
     has_many :items, through: :guesses
 
     has_secure_password
