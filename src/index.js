@@ -286,7 +286,6 @@ function addUserDiv(json) {
 
 
 function buildUserEditForm() {
-    //const editDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
     const editButton = document.createElement("button");
     editButton.innerText = "Edit"
     editButton.addEventListener("click", function() {
@@ -345,7 +344,6 @@ function editUser(event, editForm) {
 }
 
 function buildUserDeleteAction () {
-    // const deleteDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
     const deleteButton = document.createElement("button")
     deleteButton.innerText = "Delete"
     deleteButton.addEventListener("click", function() {
@@ -366,7 +364,6 @@ function deleteUser() {
 } 
 
 function buildUserLogout() {
-    // const deleteDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
     const logoutButton = document.createElement("button")
     logoutButton.innerText = "Logout"
     logoutButton.addEventListener("click", function() {
@@ -423,6 +420,46 @@ function buildItemForm() {
 
 }
 
+function buildResponse(guessInfo) {
+    const guessDiv = getElementById("INPUT CORRECT ID") //get appropraite element from form once complete
+    const responseDiv = document.createElement("div")
+    const responseHeader = document.createElement("h3")
+    
+    //confirm what comes back from guessInfo once form is complete
+    if (guessInfo["data"]["attributes"].correct == true) {
+        responseHeader.innerText = "You got it right!"
+    } else { 
+        responseHeader.innerText = "Not quite. Try again next time!"
+    }
+    
+    //confirm what comes back from guessInfo once form is complete
+    const guessSection = guessInfo["included"][0]["attributes"]
+    const responseText = document.createElement("p")
+    if (guessSection.general_type == "recycling") {
+        responseText.innerText = "This item can be recycled."
+    } else if (guessSection.general_type == "compost") {
+        responseText.innerText = "This item can be composted."
+    } else {
+        responseText.innerText = "This should be placed in the trash."
+    }
+
+    responseDiv.appendChild(responseHeader)
+    responseDiv.appendChild(responseText)
+    
+    //confirm what comes back from guessInfo once form is complete
+    if (guessSection.note) {
+        const responseNote = document.createElement("p")
+        responseNote.innerText = guessSection.note
+        responseDiv.appendChild(responseNote)
+    }
+
+    guessDiv.appendChild(responseDiv)
+}
+
+function createHomePage() {
+    buildLoginButton();
+    buildSignupButton();   
+}
 
 function deleteChildren(parent) {
     let child = parent.lastElementChild;

@@ -1,5 +1,6 @@
 class Api::V1::GuessesController < ApplicationController
     def create
+        byebug
         guess = Guess.create(guess_params)
         if guess.guessed_category == guess.item.general_type
             guess.correct = true
