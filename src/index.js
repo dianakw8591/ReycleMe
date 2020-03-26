@@ -48,7 +48,7 @@ function buildLoginButton() {
     button.innerText = "Login"
     header.appendChild(button)
     button.addEventListener("click", function() {
-        deleteChildren(main);
+        deleteChildren(search);
         buildUserLoginForm();
         deleteChildren(header);
         buildSignupButton();
@@ -62,7 +62,7 @@ function buildSignupButton() {
     button.innerText = "Signup"
     header.appendChild(button)
     button.addEventListener("click", function() {
-        deleteChildren(main);
+        deleteChildren(search);
         buildUserSignupForm();
         deleteChildren(header);
         buildLoginButton();
