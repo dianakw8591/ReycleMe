@@ -268,7 +268,6 @@ function buildUserEditForm() {
 }
 
 function editUser(event) {
-    console.log(event.target.userName.value)
     let updatedData = {username: event.target.userName.value}
     fetch(BASE_URL + "users/" + user_id, {
         method: "PUT",
@@ -281,8 +280,11 @@ function editUser(event) {
     })
     .then(res => res.json())
     .then (json => {
-        console.log(json)
-        document.getElementById("userDiv").innerText = `Welcome ${json.data.attributes.username}!`
+        if (json.message) {
+            alert(json.message)
+        } else {
+            document.getElementById("userDiv").innerText = `Welcome ${json.data.attributes.username}!`
+        }
     })
 
     // fetch(BASE_URL + user_id, {
@@ -313,7 +315,7 @@ function buildUserDeleteAction () {
 }
 
 function deleteUser() {
-    fetch(BASE_URL + user_id, {
+    fetch(SIGNUP_URL + "/" + user_id, {
         method: "DELETE"
     })
     .then( response =>  
