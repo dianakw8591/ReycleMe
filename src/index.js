@@ -6,17 +6,27 @@ const STATS_URL = "PLACE URL HERE";
 const USERS_URL = "PLACE URL HERE";
 
 let header = null;
-let main = null;
+let search = null;
+let stats = null;
+let results = null;
+let footer = null;
+
 let user_id = null;
 
 document.addEventListener("DOMContentLoaded", function() {
-    header = document.querySelector("header");
-    main = document.querySelector("main");
+    header = document.querySelector(".header");
+    search = document.querySelector(".search");
+    stats = document.querySelector(".stats");
+    results = document.querySelector(".results");
+    footer = document.querySelector(".footer");
+
     createHomePage();
 
 });
 
 function makeThePage() {
+    stats.style.display = 'block';
+    footer.style.display = 'block';
     //all the functions go in here
     //item search function
     //logout button
@@ -44,7 +54,7 @@ function buildLoginButton() {
     button.innerText = "Login"
     header.appendChild(button)
     button.addEventListener("click", function() {
-        deleteChildren(main);
+        deleteChildren(search);
         buildUserLoginForm();
         deleteChildren(header);
         addHeaderTitle()
@@ -60,7 +70,7 @@ function buildSignupButton() {
     button.innerText = "Signup"
     header.appendChild(button)
     button.addEventListener("click", function() {
-        deleteChildren(main);
+        deleteChildren(search);
         buildUserSignupForm();
         deleteChildren(header);
         addHeaderTitle()
@@ -116,7 +126,7 @@ function buildUserLoginForm () {
     loginDiv.appendChild(loginform);
     loginDiv.appendChild(loginError);
 
-    main.appendChild(loginDiv);
+    search.appendChild(loginDiv);
 
     loginform.addEventListener("submit", function(e){
         e.preventDefault();
@@ -140,13 +150,9 @@ function buildUserLoginForm () {
             if (json.message) {
                 loginError.innerText = json.message;
             } else {
-            main.removeChild(loginDiv);
+            search.removeChild(loginDiv);
             user_id = json.data.id;
-            const userdiv = document.createElement("div");
-            userdiv.id = "userDiv"
-            userdiv.innerText = `Welcome back ${json.data.attributes.username}!`
-            main.appendChild(userdiv);
-            //can modify the above
+            addUserDiv(json)
             makeThePage()
             }
         })
@@ -214,7 +220,7 @@ function buildUserSignupForm() {
     signupDiv.appendChild(signupform);
     signupDiv.appendChild(signupError);
 
-    main.appendChild(signupDiv);
+    search.appendChild(signupDiv);
 
     signupform.addEventListener("submit", function(e){
         e.preventDefault();
@@ -244,18 +250,20 @@ function buildUserSignupForm() {
                     signupError.appendChild(error);
                 };
             } else {
-            main.removeChild(signupDiv);
+            search.removeChild(signupDiv);
             user_id = json.data.id;
-            const userdiv = document.createElement("div");
-            userdiv.id = "userDiv"
-            userdiv.innerText = `Welcome ${json.data.attributes.username}!`
-            main.appendChild(userdiv);
-            //can modify the above
-
+            addUserDiv(json)
             makeThePage()
             }
         })
     })
+}
+
+function addUserDiv(json) {
+    const userdiv = document.createElement("div");
+    userdiv.id = "userDiv"
+    userdiv.innerText = `Welcome ${json.data.attributes.username}!`
+    footer.appendChild(userdiv);
 }
 
 
@@ -283,15 +291,15 @@ function buildUserEditForm() {
         editForm.appendChild(nameField)
         editForm.appendChild(editSubmit)
         editForm.appendChild(errorMessage)
-        main.appendChild(editForm)
-
+        search.appendChild(editForm)
         editForm.addEventListener("submit", function(event) {
             event.preventDefault();
-            editUser(event, editForm);
+            editUser(event);
+            search.removeChild(editForm)
         })
     })
 
-    main.appendChild(editButton);
+    footer.appendChild(editButton);
 }
 
 function editUser(event, editForm) {
@@ -312,25 +320,10 @@ function editUser(event, editForm) {
         if (json.message) {
             errorDiv.innerText = json.message;
         } else {
-            main.removeChild(editForm)
+            search.removeChild(editForm)
             document.getElementById("userDiv").innerText = `Welcome ${json.data.attributes.username}!`
         }
     })
-
-    // fetch(BASE_URL + user_id, {
-    //     method: "PATCH",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //         "Accept": "application/json"
-    //     },
-    //     body: JSON.stringify({user: userObj})
-    // })
-    // .then(resp => resp.json())
-    // .then(function(json) {
-    //     const userdiv = document.getElementById("userDiv");
-    //     userdiv.innerText = `Welcome back ${json.data.attributes.username}!`
-    // })
-
 }
 
 function buildUserDeleteAction () {
@@ -341,7 +334,7 @@ function buildUserDeleteAction () {
         deleteUser();
     })
   
-    main.appendChild(deleteButton);
+    footer.appendChild(deleteButton);
 }
 
 function deleteUser() {
@@ -349,7 +342,7 @@ function deleteUser() {
         method: "DELETE"
     })
     .then( response =>  
-        {deleteChildren(main), 
+        {
         createHomePage(); 
     })
 } 
@@ -362,13 +355,11 @@ function buildUserLogout() {
         logOut();
     })
   
-    main.appendChild(logoutButton);
+    footer.appendChild(logoutButton);
 }
 
 function logOut() {
-    deleteChildren(main);
-    createHomePage();
-    user_id = null
+    createHomePage();  
 }
 
 function getStats() {
@@ -394,7 +385,7 @@ function showStats(data) {
     // })
     const analyticsBox = document.createElement("div");
     const h1 = document.createElement("h1");
-    h1.innerText = "Your guesses so far:"
+    h1.innerText = "Score:"
 
     const correctcount = document.createElement("h3");
     correctcount.innerText = `Correct: ${data.correct}`;
@@ -407,7 +398,7 @@ function showStats(data) {
     analyticsBox.appendChild(correctcount);
     analyticsBox.appendChild(incorrectcount);
 
-    main.appendChild(analyticsBox);
+    stats.appendChild(analyticsBox);
 }
 
 function buildItemForm() {
@@ -415,6 +406,13 @@ function buildItemForm() {
 }
 
 function createHomePage() {
+    user_id = null;
+    deleteChildren(search);
+    deleteChildren(stats);
+    deleteChildren(footer);
+    deleteChildren(results);
+    stats.style.display = 'none';
+    footer.style.display = 'none'
     addHeaderTitle();
     buildLoginButton();
     buildSignupButton();   
