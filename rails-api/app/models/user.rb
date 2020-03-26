@@ -18,4 +18,4 @@ class User < ApplicationRecord
         end
         guess_count
     end
-end
+end 

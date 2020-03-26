@@ -377,17 +377,18 @@ function buildResponse(guessInfo) {
     const responseHeader = document.createElement("h3")
     
     //confirm what comes back from guessInfo once form is complete
-    if (guessInfo.correct == true) {
+    if (guessInfo["data"]["attributes"].correct == true) {
         responseHeader.innerText = "You got it right!"
     } else { 
         responseHeader.innerText = "Not quite. Try again next time!"
     }
-
+    
     //confirm what comes back from guessInfo once form is complete
+    const guessSection = guessInfo["included"][0]["attributes"]
     const responseText = document.createElement("p")
-    if (guessInfo.general_type == "recycling") {
+    if (guessSection.general_type == "recycling") {
         responseText.innerText = "This item can be recycled."
-    } else if (guessInfo.general_type == "compost") {
+    } else if (guessSection.general_type == "compost") {
         responseText.innerText = "This item can be composted."
     } else {
         responseText.innerText = "This should be placed in the trash."
@@ -397,9 +398,9 @@ function buildResponse(guessInfo) {
     responseDiv.appendChild(responseText)
     
     //confirm what comes back from guessInfo once form is complete
-    if (guessInfo.note) {
+    if (guessSection.note) {
         const responseNote = document.createElement("p")
-        responseNote.innerText = guessInfo.note
+        responseNote.innerText = guessSection.note
         responseDiv.appendChild(responseNote)
     }
 
