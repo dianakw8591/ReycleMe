@@ -235,7 +235,6 @@ function buildUserSignupForm() {
 
 
 function buildUserEditForm() {
-    //const editDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
     const editButton = document.createElement("button");
     editButton.innerText = "Edit"
     editButton.addEventListener("click", function() {
@@ -291,25 +290,9 @@ function editUser(event, editForm) {
             document.getElementById("userDiv").innerText = `Welcome ${json.data.attributes.username}!`
         }
     })
-
-    // fetch(BASE_URL + user_id, {
-    //     method: "PATCH",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //         "Accept": "application/json"
-    //     },
-    //     body: JSON.stringify({user: userObj})
-    // })
-    // .then(resp => resp.json())
-    // .then(function(json) {
-    //     const userdiv = document.getElementById("userDiv");
-    //     userdiv.innerText = `Welcome back ${json.data.attributes.username}!`
-    // })
-
 }
 
 function buildUserDeleteAction () {
-    // const deleteDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
     const deleteButton = document.createElement("button")
     deleteButton.innerText = "Delete"
     deleteButton.addEventListener("click", function() {
@@ -330,7 +313,6 @@ function deleteUser() {
 } 
 
 function buildUserLogout() {
-    // const deleteDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
     const logoutButton = document.createElement("button")
     logoutButton.innerText = "Logout"
     logoutButton.addEventListener("click", function() {
@@ -387,6 +369,41 @@ function showStats(data) {
 
 function buildItemForm() {
 
+}
+
+function buildResponse(guessInfo) {
+    const guessDiv = getElementById("INPUT CORRECT ID") //get appropraite element from form once complete
+    const responseDiv = document.createElement("div")
+    const responseHeader = document.createElement("h3")
+    
+    //confirm what comes back from guessInfo once form is complete
+    if (guessInfo.correct == true) {
+        responseHeader.innerText = "You got it right!"
+    } else { 
+        responseHeader.innerText = "Not quite. Try again next time!"
+    }
+
+    //confirm what comes back from guessInfo once form is complete
+    const responseText = document.createElement("p")
+    if (guessInfo.general_type == "recycling") {
+        responseText.innerText = "This item can be recycled."
+    } else if (guessInfo.general_type == "compost") {
+        responseText.innerText = "This item can be composted."
+    } else {
+        responseText.innerText = "This should be placed in the trash."
+    }
+
+    responseDiv.appendChild(responseHeader)
+    responseDiv.appendChild(responseText)
+    
+    //confirm what comes back from guessInfo once form is complete
+    if (guessInfo.note) {
+        const responseNote = document.createElement("p")
+        responseNote.innerText = guessInfo.note
+        responseDiv.appendChild(responseNote)
+    }
+
+    guessDiv.appendChild(responseDiv)
 }
 
 function createHomePage() {
