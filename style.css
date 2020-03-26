@@ -6,6 +6,7 @@
     grid-row-gap: 0px;
     width: 100vw;
     height: 100vh;
+    font-family: monospace;
     }
     
 .header { 
@@ -14,12 +15,11 @@
 
 h2 {
     padding: 10px;
-    font-family: monospace;
 }
 
 button {
     border-radius: 8px;
-    font-size: 18px;
+    font-size: 12px;
     background-color: rgba(148, 148, 148, 0.966);
 }
 
