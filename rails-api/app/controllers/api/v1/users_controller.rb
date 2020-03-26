@@ -22,14 +22,12 @@ class Api::V1::UsersController < ApplicationController
         end
     end
 
-<<<<<<< HEAD
     def guesses
         user = User.find(params[:id])
         guess_count = user.guesses_count
         render json: guess_count
     end
 
-=======
     def delete
         user = User.find_by_id(params[:id])
         user.update(user_params)
@@ -54,20 +52,6 @@ class Api::V1::UsersController < ApplicationController
         end
     end
 
-    # def edit
-    #     user = User.find(user_params[:user_id])
-    #     user.update(username: user_params[:username])
-    #     if user
-    #         options = {
-    #             include: [:guesses]
-    #           }
-    #         render json: UserSerializer.new(user, options)
-    #     else
-    #         render json: {message: "Unable to locate User"}
-    #     end
-    # end
-
->>>>>>> edit_fetch
     private
     
     def user_params
