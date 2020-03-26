@@ -28,9 +28,8 @@ class Api::V1::UsersController < ApplicationController
         render json: guess_count
     end
 
-    def delete
+    def destroy
         user = User.find_by_id(params[:id])
-        user.update(user_params)
         if user 
             user.destroy
             render json: {message: "User deleted"}
@@ -42,13 +41,13 @@ class Api::V1::UsersController < ApplicationController
     def update
         user = User.find(params[:id])
         user.update(user_params)
-        if user
+        if user.valid?
             options = {
                 include: [:guesses]
               }
             render json: UserSerializer.new(user, options)
         else
-            render json: {message: "Unable to locate User"}
+            render json: {message: user.errors.full_messages}
         end
     end
 
