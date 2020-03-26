@@ -6,10 +6,12 @@ const STATS_URL = "PLACE URL HERE";
 const USERS_URL = "PLACE URL HERE";
 
 let header = null;
-let main = null;
-let user_id = null;
+let search = null;
+let stats = null;
+let results = null;
+let footer = null;
 
-const USER_URL = `localhost:3000/api/v1/${user_id}`;
+let user_id = null;
 
 // temporary array of total recyclable items
 const recyclables = ["Aluminum cans",
@@ -27,13 +29,19 @@ const recyclables = ["Aluminum cans",
 "White ledger paper" ];
 
 document.addEventListener("DOMContentLoaded", function() {
-    header = document.querySelector("header");
-    main = document.querySelector("main");
+    header = document.querySelector(".header");
+    search = document.querySelector(".search");
+    stats = document.querySelector(".stats");
+    results = document.querySelector(".results");
+    footer = document.querySelector(".footer");
+
     createHomePage();
 
 });
 
 function makeThePage() {
+    stats.style.display = 'block';
+    footer.style.display = 'block';
     //all the functions go in here
     autocomplete(document.getElementById("myInput"), recyclables);
     //logout button
@@ -44,8 +52,15 @@ function makeThePage() {
     buildUserEditForm();
     buildUserDeleteAction();
     buildUserLogout();
-    // getStats();
+    getStats();
+    
     // buildItemForm();
+}
+
+function addHeaderTitle() {
+    const title = document.createElement('h2');
+    title.innerText = 'Welcome to RecycleMe';
+    header.appendChild(title);
 }
 
 function buildLoginButton() {
@@ -54,9 +69,12 @@ function buildLoginButton() {
     button.innerText = "Login"
     header.appendChild(button)
     button.addEventListener("click", function() {
+        deleteChildren(search);
         buildUserLoginForm();
-        header.removeChild(button)
-        header.removeChild(document.getElementById("signup"))
+        deleteChildren(header);
+        addHeaderTitle()
+        buildSignupButton();
+
     })
     
 }
@@ -67,9 +85,11 @@ function buildSignupButton() {
     button.innerText = "Signup"
     header.appendChild(button)
     button.addEventListener("click", function() {
+        deleteChildren(search);
         buildUserSignupForm();
-        header.removeChild(button);
-        header.removeChild(document.getElementById("login"))
+        deleteChildren(header);
+        addHeaderTitle()
+        buildLoginButton();
     })
     
 }
@@ -78,10 +98,13 @@ function buildUserLoginForm () {
     const loginDiv = document.createElement("div");
     loginDiv.id = "login-div";
 
+    const loginError = document.createElement("div");
+    loginError.id = "login-error";
+
     const h3 = document.createElement("h3");
     h3.innerText = "Please login";
 
-    const loginform =document.createElement("form");
+    const loginform = document.createElement("form");
     loginform.id = "login-form";
 
     const namelabel = document.createElement("label");
@@ -116,8 +139,9 @@ function buildUserLoginForm () {
     
     loginDiv.appendChild(h3);
     loginDiv.appendChild(loginform);
+    loginDiv.appendChild(loginError);
 
-    main.appendChild(loginDiv);
+    search.appendChild(loginDiv);
 
     loginform.addEventListener("submit", function(e){
         e.preventDefault();
@@ -137,15 +161,13 @@ function buildUserLoginForm () {
         })
         .then(resp => resp.json())
         .then(function(json) {
+            loginError.innerText = '';
             if (json.message) {
-                alert(json.message)
+                loginError.innerText = json.message;
             } else {
-            main.removeChild(loginDiv);
+            search.removeChild(loginDiv);
             user_id = json.data.id;
-            const userdiv = document.createElement("div");
-            userdiv.innerText = `Welcome back ${json.data.attributes.username}!`
-            main.appendChild(userdiv);
-            //can modify the above
+            addUserDiv(json)
             makeThePage()
             }
         })
@@ -156,6 +178,9 @@ function buildUserLoginForm () {
 function buildUserSignupForm() {
     const signupDiv = document.createElement("div");
     signupDiv.id = "signup-div";
+
+    const signupError = document.createElement("div");
+    signupError.id = "signup-error";
 
     const h3 = document.createElement("h3");
     h3.innerText = "Please Sign-up";
@@ -208,8 +233,9 @@ function buildUserSignupForm() {
 
     signupDiv.appendChild(h3);
     signupDiv.appendChild(signupform);
+    signupDiv.appendChild(signupError);
 
-    main.appendChild(signupDiv);
+    search.appendChild(signupDiv);
 
     signupform.addEventListener("submit", function(e){
         e.preventDefault();
@@ -231,20 +257,28 @@ function buildUserSignupForm() {
         })
         .then(resp => resp.json())
         .then(function(json) {
+            deleteChildren(signupError)
             if (json.message) {
-                alert(json.message)
+                for (const message of json.message) {
+                    const error = document.createElement('div')
+                    error.innerText = message;
+                    signupError.appendChild(error);
+                };
             } else {
-            main.removeChild(signupDiv);
+            search.removeChild(signupDiv);
             user_id = json.data.id;
-            const userdiv = document.createElement("div");
-            userdiv.innerText = `Welcome ${json.data.attributes.username}!`
-            main.appendChild(userdiv);
-            //can modify the above
-
+            addUserDiv(json)
             makeThePage()
             }
         })
     })
+}
+
+function addUserDiv(json) {
+    const userdiv = document.createElement("div");
+    userdiv.id = "userDiv"
+    userdiv.innerText = `Welcome ${json.data.attributes.username}!`
+    footer.appendChild(userdiv);
 }
 
 
@@ -254,30 +288,57 @@ function buildUserEditForm() {
     editButton.innerText = "Edit"
     editButton.addEventListener("click", function() {
         const editForm = document.createElement("form")
-        editForm.setAttribute("method", "patch");
         const header = document.createElement("h3")
         header.innerText = "Update Your Information"
         const nameLabel = document.createElement("label")
-        nameLabel.innerText = "Name :"
-        const nameField = document.createElement("inut")
+        nameLabel.innerText = "Name : "
+        const nameField = document.createElement("input")
         nameField.name = "userName"
         const editSubmit = document.createElement("button")
         editSubmit.type = "submit"
         editSubmit.innerText = "Update Information"
+        const errorMessage = document.createElement("div")
+        errorMessage.id = 'edit_user_error'
 
 
         editForm.appendChild(header)
         editForm.appendChild(nameLabel)
         editForm.appendChild(nameField)
         editForm.appendChild(editSubmit)
-
+        editForm.appendChild(errorMessage)
+        search.appendChild(editForm)
         editForm.addEventListener("submit", function(event) {
-            //call a function to edit
+            event.preventDefault();
+            editUser(event);
+            search.removeChild(editForm)
         })
-
     })
 
-    main.appendChild(editButton);
+    footer.appendChild(editButton);
+}
+
+function editUser(event, editForm) {
+    let errorDiv = document.getElementById('edit_user_error');
+    errorDiv.innerText = '';
+    let updatedData = {username: event.target.userName.value}
+    fetch(BASE_URL + "users/" + user_id, {
+        method: "PUT",
+        // mode: "no-cors",
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json' 
+        },
+        body: JSON.stringify(updatedData)
+    })
+    .then(res => res.json())
+    .then (json => {
+        if (json.message) {
+            errorDiv.innerText = json.message;
+        } else {
+            search.removeChild(editForm)
+            document.getElementById("userDiv").innerText = `Welcome ${json.data.attributes.username}!`
+        }
+    })
 }
 
 function buildUserDeleteAction () {
@@ -288,15 +349,15 @@ function buildUserDeleteAction () {
         deleteUser();
     })
   
-    main.appendChild(deleteButton);
+    footer.appendChild(deleteButton);
 }
 
 function deleteUser() {
-    fetch(BASE_URL + user_id, {
+    fetch(SIGNUP_URL + "/" + user_id, {
         method: "DELETE"
     })
     .then( response =>  
-        {deleteChildren(main), 
+        {
         createHomePage(); 
     })
 } 
@@ -309,17 +370,15 @@ function buildUserLogout() {
         logOut();
     })
   
-    main.appendChild(logoutButton);
+    footer.appendChild(logoutButton);
 }
 
 function logOut() {
-    deleteChildren(main);
-    createHomePage();
-    user_id = null
+    createHomePage();  
 }
 
 function getStats() {
-    fetch(ITEMS_URL)
+    fetch(`${SIGNUP_URL}/${user_id}/guesses`)
     .then(function(res) {
         return res.json();
     })
@@ -329,24 +388,32 @@ function getStats() {
 }
 
 function showStats(data) {
-    let correct = []
-    let incorrect = []
-    data.forEach(stat => {
-        //just a guess at the moment. Need to determine what structure this will be
-        if (stat.correct == false) {
-            incorrect.push(stat)
-        } else {
-            correct.push(stat)
-        }
-    })
-    const analyticsBox = documnent.getElementById("analytics");
-    const correctcount = documnent.createElement("h3");
-    const incorrectcount = documnent.createElement("h3");
+    // let correct = []
+    // let incorrect = []
+    // data.forEach(stat => {
+    //     //just a guess at the moment. Need to determine what structure this will be
+    //     if (stat.correct == false) {
+    //         incorrect.push(stat)
+    //     } else {
+    //         correct.push(stat)
+    //     }
+    // })
+    const analyticsBox = document.createElement("div");
+    const h1 = document.createElement("h1");
+    h1.innerText = "Score:"
 
-    correctcount.innerText = correct.length;
-    incorrectcount.innerText = incorrect.length;
+    const correctcount = document.createElement("h3");
+    correctcount.innerText = `Correct: ${data.correct}`;
+
+    const incorrectcount = document.createElement("h3");
+    incorrectcount.innerText = `Incorrect: ${data.incorrect}`;
+
+    
+    analyticsBox.appendChild(h1);
     analyticsBox.appendChild(correctcount);
     analyticsBox.appendChild(incorrectcount);
+
+    stats.appendChild(analyticsBox);
 }
 
 function buildItemForm() {
@@ -383,8 +450,17 @@ const searchForm = document.createElement("form")
 
 
 function createHomePage() {
+    user_id = null;
+    deleteChildren(search);
+    deleteChildren(stats);
+    deleteChildren(footer);
+    deleteChildren(results);
+    stats.style.display = 'none';
+    footer.style.display = 'none'
+    addHeaderTitle();
     buildLoginButton();
     buildSignupButton();   
+    
 }
 
 function deleteChildren(parent) {

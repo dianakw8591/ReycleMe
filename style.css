@@ -1,4 +1,39 @@
+<<<<<<< HEAD
 /* header {
     color: red; background-color: salmon;
     
 } */
+=======
+.parent {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(7, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    width: 100vw;
+    height: 100vh;
+    }
+    
+    .header { 
+        grid-area: 1 / 1 / 3 / 5;
+        background-color: green; }
+
+    h2 {
+        padding: 10px;
+        font-family: monospace;
+    }
+
+    .stats { grid-area: 3 / 1 / 7 / 2; 
+            background: beige;
+            display: none;
+            }
+
+    .search { grid-area: 3 / 2 / 5 / 5; }
+
+    .results { grid-area: 3 / 2 / 5 / 5;  }
+
+    .footer { grid-area: 7 / 1 / 8 / 5;  
+            background-color: rgba(51, 175, 175, 0.5);
+            display: none;
+        }
+>>>>>>> e734a08401d28fae9a60aae01fa29bcc0a8b72d8
