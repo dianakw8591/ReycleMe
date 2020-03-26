@@ -39,15 +39,46 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
+function createHomePage() {
+    user_id = null;
+    deleteChildren(header);
+    deleteChildren(search);
+    deleteChildren(stats);
+    deleteChildren(footer);
+    deleteChildren(results);
+    stats.style.display = 'none';
+    footer.style.display = 'none'
+    addHeaderTitle();
+    buildLoginButton();
+    buildSignupButton();   
+    
+}
+
+function addHeaderTitle() {
+    const title = document.createElement('h2');
+    title.innerText = 'Welcome to RecycleMe';
+    header.appendChild(title);
+    const div = document.createElement('div');
+    div.className ='header-buttons';
+    header.appendChild(div);
+}
+
 function makeThePage() {
     stats.style.display = 'block';
     footer.style.display = 'block';
+    deleteChildren(header);
+    addHeaderTitle();
     //all the functions go in here
+<<<<<<< HEAD
     autocomplete(document.getElementById("myInput"), recyclables);
     //logout button
     //edit button
     //delete button
     //stats 
+=======
+    //item search function
+    
+>>>>>>> b1dcbe40ff96f0aa1050bc9037963d7fcef98266
 
     buildUserEditForm();
     buildUserDeleteAction();
@@ -57,17 +88,12 @@ function makeThePage() {
     // buildItemForm();
 }
 
-function addHeaderTitle() {
-    const title = document.createElement('h2');
-    title.innerText = 'Welcome to RecycleMe';
-    header.appendChild(title);
-}
 
 function buildLoginButton() {
     const button = document.createElement("button");
     button.id = "login";
     button.innerText = "Login"
-    header.appendChild(button)
+    document.querySelector(".header-buttons").appendChild(button)
     button.addEventListener("click", function() {
         deleteChildren(search);
         buildUserLoginForm();
@@ -83,7 +109,7 @@ function buildSignupButton() {
     const button = document.createElement("button");
     button.id = "signup";
     button.innerText = "Signup"
-    header.appendChild(button)
+    document.querySelector(".header-buttons").appendChild(button)
     button.addEventListener("click", function() {
         deleteChildren(search);
         buildUserSignupForm();
@@ -306,11 +332,11 @@ function buildUserEditForm() {
         editForm.appendChild(nameField)
         editForm.appendChild(editSubmit)
         editForm.appendChild(errorMessage)
+        deleteChildren(search);
         search.appendChild(editForm)
         editForm.addEventListener("submit", function(event) {
             event.preventDefault();
-            editUser(event);
-            search.removeChild(editForm)
+            editUser(event, editForm);
         })
     })
 
@@ -335,8 +361,8 @@ function editUser(event, editForm) {
         if (json.message) {
             errorDiv.innerText = json.message;
         } else {
-            search.removeChild(editForm)
-            document.getElementById("userDiv").innerText = `Welcome ${json.data.attributes.username}!`
+            search.removeChild(editForm);
+            document.getElementById("userDiv").innerText = `Welcome ${json.data.attributes.username}!`;
         }
     })
 }
@@ -434,6 +460,7 @@ const searchForm = document.createElement("form")
     kinds.id=kinds
 }
 
+<<<<<<< HEAD
 
 
 
@@ -462,6 +489,8 @@ function createHomePage() {
     buildSignupButton();   
     
 }
+=======
+>>>>>>> b1dcbe40ff96f0aa1050bc9037963d7fcef98266
 
 function deleteChildren(parent) {
     let child = parent.lastElementChild;
