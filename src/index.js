@@ -471,7 +471,7 @@ function buildItemForm() {
     const header = document.createElement("h3")
     header.innerText = "What do you want to recycle"
     const searchLabel = document.createElement("label")
-    searchLabel.innerText = "Type it here :"
+    searchLabel.innerText = "Select an item:"
 
 
     // const searchField = document.createElement("input")
