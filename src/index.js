@@ -370,6 +370,7 @@ function editUser(event, editForm) {
             errorDiv.innerText = json.message;
         } else {
             search.removeChild(editForm);
+            buildItemForm();
             document.getElementById("userDiv").innerText = `Welcome ${json.data.attributes.username}!`;
         }
     })
