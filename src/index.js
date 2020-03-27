@@ -87,14 +87,10 @@ function makeThePage() {
     addHeaderTitle();
     //all the functions go in here
     buildItemForm();
-    
-
     buildUserEditForm();
     buildUserDeleteAction();
     buildUserLogout();
     getStats();
-    
-    // buildItemForm();
 }
 
 
@@ -436,17 +432,24 @@ function showStats(data) {
     h1.innerText = "Score:"
 
     const correctcount = document.createElement("h3");
-    correctcount.innerText = `${data.correct} ⭐`;
+    correctcount.id = "correct_id"
+    
 
     const incorrectcount = document.createElement("h3");
-    incorrectcount.innerText = ` ${data.incorrect} ❌`;
-
+    incorrectcount.id = "incorrect_id"
     
     analyticsBox.appendChild(h1);
     analyticsBox.appendChild(correctcount);
     analyticsBox.appendChild(incorrectcount);
 
     stats.appendChild(analyticsBox);
+
+    inputStatNumbers(data.correct, data.incorrect)
+}
+
+function inputStatNumbers(correct, incorrect) {
+    document.getElementById("correct_id").innerText = `${correct} ⭐`
+    document.getElementById("incorrect_id").innerText = `${incorrect} ❌`
 }
 
 
@@ -462,8 +465,8 @@ function addItemToDropDown(object, parent){
 
 
 function buildItemForm() {
-const searchForm = document.createElement("form")
-    searchForm.setAttribute("method", "patch");
+    const searchForm = document.createElement("form")
+    
     const header = document.createElement("h3")
     header.innerText = "What do you want to recycle"
     const searchLabel = document.createElement("label")
@@ -481,6 +484,7 @@ const searchForm = document.createElement("form")
             json.data.map(object => addItemToDropDown(object, searchMenu)) 
 
         });
+    searchMenu.name = "searchMenu"
 
 
 
@@ -530,21 +534,53 @@ const searchForm = document.createElement("form")
     kinds.appendChild(cLabel)
     searchForm.appendChild(kinds)
     search.appendChild(searchForm)
+
+    searchForm.addEventListener("submit", function(event){
+        event.preventDefault();
+        console.log(event.target.select)
+        createGuess(event)
+    })
+}
+
+function createGuess(event) {
+    const input = event.target.searchMenu.value
+    const radioButtonSelection = event.target.general_type.value
+    const guess = {"guess": {
+        "user_id": `${user_id}`, "item_id": `${input}`, "guessed_category": `${radioButtonSelection}`
+        }
+    }
+    fetch(BASE_URL + "guesses", {
+        method: "POST",
+        // mode: "no-cors",
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json' 
+        },
+        body: JSON.stringify(guess)
+    })
+    .then(res => res.json())
+    .then (json => {
+        buildResponse(json)
+    })
+
 }
 
 function buildResponse(guessInfo) {
-    const guessDiv = getElementById("INPUT CORRECT ID") //get appropraite element from form once complete
     const responseDiv = document.createElement("div")
-    const responseHeader = document.createElement("h3")
+    const responseHeader = document.createElement("h4")
     
-    //confirm what comes back from guessInfo once form is complete
     if (guessInfo["data"]["attributes"].correct == true) {
         responseHeader.innerText = "You got it right!"
+        let numToIncrease = document.getElementById("correct_id").innerText.split(" ")[0]
+        let inncorrectCount = document.getElementById("incorrect_id").innerText.split(" ")[0]
+        inputStatNumbers(parseInt(numToIncrease) +1, inncorrectCount)
     } else { 
         responseHeader.innerText = "Not quite. Try again next time!"
+        let numToIncrease = document.getElementById("incorrect_id").innerText.split(" ")[0]
+        let correctCount = document.getElementById("correct_id").innerText.split(" ")[0]
+        inputStatNumbers(correctCount, parseInt(numToIncrease) +1)
     }
     
-    //confirm what comes back from guessInfo once form is complete
     const guessSection = guessInfo["included"][0]["attributes"]
     const responseText = document.createElement("p")
     if (guessSection.general_type == "recycling") {
@@ -558,14 +594,14 @@ function buildResponse(guessInfo) {
     responseDiv.appendChild(responseHeader)
     responseDiv.appendChild(responseText)
     
-    //confirm what comes back from guessInfo once form is complete
     if (guessSection.note) {
         const responseNote = document.createElement("p")
         responseNote.innerText = guessSection.note
         responseDiv.appendChild(responseNote)
     }
 
-    guessDiv.appendChild(responseDiv)
+    deleteChildren(results)
+    results.appendChild(responseDiv)
 }
 
 function deleteChildren(parent) {
