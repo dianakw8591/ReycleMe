@@ -25,8 +25,10 @@ img {
 
 button {
     border-radius: 8px;
-    font-size: 12px;
+    font-size: 16px;
     background-color: rgba(148, 148, 148, 0.966);
+    margin: 6px;
+    padding: 2px;
 }
 
 .header-buttons {
@@ -40,13 +42,27 @@ button {
 .stats { grid-area: 3 / 1 / 7 / 2; 
         background: beige;
         display: none;
+        padding: 10px;
         }
 
-.search { grid-area: 3 / 2 / 5 / 5; }
+.search { grid-area: 3 / 2 / 5 / 5; 
+    font-size: 16px;
+    padding: 10px;
+}
 
-.results { grid-area: 5 / 2 / 7 / 5;  }
+.results { grid-area: 5 / 2 / 7 / 5;  
+    text-align: center;
+    font-size: 16px;
+}
 
 .footer { grid-area: 7 / 1 / 8 / 5;  
         background-color: rgb(160, 146, 100);
         display: none;
+        text-align: center;
     }
+
+    #userDiv {
+        font-size: 25px;
+    }
+
+
