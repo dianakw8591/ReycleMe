@@ -87,19 +87,14 @@ function makeThePage() {
     addHeaderTitle();
     //all the functions go in here
     buildItemForm();
-    
-
     buildUserEditForm();
     buildUserDeleteAction();
     buildUserLogout();
     getStats();
-    
-    // buildItemForm();
 }
 
 
 function buildLoginButton() {
-    console.log("TEST")
     const button = document.createElement("button");
     button.id = "login";
     button.innerText = "Login"
@@ -437,10 +432,12 @@ function showStats(data) {
     h1.innerText = "Score:"
 
     const correctcount = document.createElement("h3");
+    correctcount.id = "correct_id"
     correctcount.innerText = `${data.correct} ⭐`;
 
     const incorrectcount = document.createElement("h3");
     incorrectcount.innerText = ` ${data.incorrect} ❌`;
+    incorrectcount.id = "incorrect_id"
 
     
     analyticsBox.appendChild(h1);
@@ -463,8 +460,8 @@ function addItemToDropDown(object, parent){
 
 
 function buildItemForm() {
-const searchForm = document.createElement("form")
-    searchForm.setAttribute("method", "patch");
+    const searchForm = document.createElement("form")
+    
     const header = document.createElement("h3")
     header.innerText = "What do you want to recycle"
     const searchLabel = document.createElement("label")
@@ -531,21 +528,52 @@ const searchForm = document.createElement("form")
     kinds.appendChild(cLabel)
     searchForm.appendChild(kinds)
     search.appendChild(searchForm)
+
+    searchForm.addEventListener("submit", function(event){
+        event.preventDefault();
+        createGuess(event)
+    })
+}
+
+function createGuess(event) {
+    const input = event.target.searchItem.value
+    const radioButtonSelection = event.target.general_type.value
+    const item_id = 1 //ADD IN ITEM ID ONCE WE HAVE IT
+    const guess = {"guess": {
+        "user_id": `${user_id}`, "item_id": `${item_id}`, "guessed_category": `${radioButtonSelection}`
+        }
+    }
+    fetch(BASE_URL + "guesses", {
+        method: "POST",
+        // mode: "no-cors",
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json' 
+        },
+        body: JSON.stringify(guess)
+    })
+    .then(res => res.json())
+    .then (json => {
+        buildResponse(json)
+    })
+
 }
 
 function buildResponse(guessInfo) {
-    const guessDiv = getElementById("INPUT CORRECT ID") //get appropraite element from form once complete
+    const searchDiv = document.getElementById('search_div') 
     const responseDiv = document.createElement("div")
-    const responseHeader = document.createElement("h3")
+    const responseHeader = document.createElement("h4")
     
-    //confirm what comes back from guessInfo once form is complete
     if (guessInfo["data"]["attributes"].correct == true) {
         responseHeader.innerText = "You got it right!"
+        let numToIncrease = document.getElementById("correct_id").innerText.split(" ")[1]
+        document.getElementById("correct_id").innerText = "Correct: " + (parseInt(numToIncrease) +1)
     } else { 
         responseHeader.innerText = "Not quite. Try again next time!"
+        let numToIncrease = document.getElementById("incorrect_id").innerText.split(" ")[1]
+        document.getElementById("incorrect_id").innerText = "Incorrect: " + (parseInt(numToIncrease) +1)
     }
     
-    //confirm what comes back from guessInfo once form is complete
     const guessSection = guessInfo["included"][0]["attributes"]
     const responseText = document.createElement("p")
     if (guessSection.general_type == "recycling") {
@@ -559,14 +587,13 @@ function buildResponse(guessInfo) {
     responseDiv.appendChild(responseHeader)
     responseDiv.appendChild(responseText)
     
-    //confirm what comes back from guessInfo once form is complete
     if (guessSection.note) {
         const responseNote = document.createElement("p")
         responseNote.innerText = guessSection.note
         responseDiv.appendChild(responseNote)
     }
 
-    guessDiv.appendChild(responseDiv)
+    searchDiv.appendChild(responseDiv)
 }
 
 function deleteChildren(parent) {
