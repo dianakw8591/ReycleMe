@@ -67,6 +67,7 @@ function makeThePage() {
 
 
 function buildLoginButton() {
+    console.log("TEST")
     const button = document.createElement("button");
     button.id = "login";
     button.innerText = "Login"
