@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
-  resources :items
   namespace :api do
     namespace :v1 do
       post '/login', to: 'users#login'
       get '/users/:id/guesses', to: 'users#guesses'
+      resources :items
       resources :users
       resources :guesses
     end
