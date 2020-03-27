@@ -19,11 +19,10 @@
 * Once you hit the submit button, the app will display whether you guessed correctly and update your overall score.
 
 ### Screenshots
-![](images/character_creation.png)
+![](images/Signup.png)
 
-![](images/edit_spells.png)
+![](images/Main_screen.png)
 
-![](images/character_show_page.png)
 
 #### License [MIT](https://en.wikipedia.org/wiki/MIT_License)
 
