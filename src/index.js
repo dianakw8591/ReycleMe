@@ -13,6 +13,21 @@ let footer = null;
 
 let user_id = null;
 
+// temporary array of total recyclable items
+const recyclables = ["Aluminum cans",
+"Brown paper bags",
+ "Cardboard",
+"Catalogs", "magazines", "phone books",
+"cereal boxes", "shoe boxes",
+ "Colored paper",
+ "Computer paper",
+ "Envelopes",
+"Glass bottles" ,
+"Newspapers", "junk mail",
+"Plastic bottles" ,
+"Tin and steel cans",
+"White ledger paper" ];
+
 document.addEventListener("DOMContentLoaded", function() {
     header = document.querySelector(".header");
     search = document.querySelector(".search");
@@ -71,7 +86,7 @@ function makeThePage() {
     deleteChildren(header);
     addHeaderTitle();
     //all the functions go in here
-    //item search function
+    buildItemForm();
     
 
     buildUserEditForm();
@@ -303,7 +318,6 @@ function addUserDiv(json) {
 
 
 function buildUserEditForm() {
-    //const editDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
     const editButton = document.createElement("button");
     editButton.innerText = "Edit"
     editButton.addEventListener("click", function() {
@@ -362,7 +376,6 @@ function editUser(event, editForm) {
 }
 
 function buildUserDeleteAction () {
-    // const deleteDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
     const deleteButton = document.createElement("button")
     deleteButton.innerText = "Delete"
     deleteButton.addEventListener("click", function() {
@@ -383,7 +396,6 @@ function deleteUser() {
 } 
 
 function buildUserLogout() {
-    // const deleteDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
     const logoutButton = document.createElement("button")
     logoutButton.innerText = "Logout"
     logoutButton.addEventListener("click", function() {
@@ -437,9 +449,103 @@ function showStats(data) {
 }
 
 function buildItemForm() {
+const searchForm = document.createElement("form")
+    searchForm.setAttribute("method", "patch");
+    const header = document.createElement("h3")
+    header.innerText = "What do you want to recycle"
+    const searchLabel = document.createElement("label")
+    searchLabel.innerText = "Type it here :"
+    const searchField = document.createElement("input")
+    searchField.name = "searchItem"
+    const searchSubmit = document.createElement("button")
+    searchSubmit.type = "submit"
+    searchSubmit.innerText = "Submit"
+    const pickType = document.createElement("h4")
+    pickType.innerHTML = "What category does this item fit into?"
+    const kinds = document.createElement("div")
+    kinds.id=kinds
+    const recy = document.createElement("input")
+    recy.setAttribute("type", "radio");
+    recy.label = "Recycling"
+    recy.id="recycling"
+    recy.name="general_type"
+    recy.value="recycling"
+    const rLabel = document.createElement("label")
+    rLabel.innerHTML = "Recycling"
+    const garb = document.createElement("input")
+    garb.setAttribute("type", "radio");
+    garb.id="garbage"
+    garb.name="general_type"
+    garb.value="garbage"
+    const gLabel = document.createElement("label")
+    gLabel.innerHTML = "Garbage"
+    const comp = document.createElement("input")
+    comp.setAttribute("type", "radio");
+    comp.id="compost"
+    comp.name="general_type"
+    comp.value="compost"
+    const cLabel = document.createElement("label")
+    cLabel.innerHTML = "Compost"
+    const br = document.createElement("br")
+    const br2 = document.createElement("br")
 
+    searchForm.appendChild(header)
+    searchForm.appendChild(searchLabel)
+    searchForm.appendChild(searchField)
+    searchForm.appendChild(searchSubmit)
+    searchForm.appendChild(pickType)
+    kinds.appendChild(recy)
+    kinds.appendChild(rLabel)
+    kinds.appendChild(br)
+    kinds.appendChild(garb)
+    kinds.appendChild(gLabel)
+    kinds.appendChild(br2)
+    kinds.appendChild(comp)
+    kinds.appendChild(cLabel)
+    searchForm.appendChild(kinds)
+    search.appendChild(searchForm)
 }
 
+function buildResponse(guessInfo) {
+    const guessDiv = getElementById("INPUT CORRECT ID") //get appropraite element from form once complete
+    const responseDiv = document.createElement("div")
+    const responseHeader = document.createElement("h3")
+    
+    //confirm what comes back from guessInfo once form is complete
+    if (guessInfo["data"]["attributes"].correct == true) {
+        responseHeader.innerText = "You got it right!"
+    } else { 
+        responseHeader.innerText = "Not quite. Try again next time!"
+    }
+    
+    //confirm what comes back from guessInfo once form is complete
+    const guessSection = guessInfo["included"][0]["attributes"]
+    const responseText = document.createElement("p")
+    if (guessSection.general_type == "recycling") {
+        responseText.innerText = "This item can be recycled."
+    } else if (guessSection.general_type == "compost") {
+        responseText.innerText = "This item can be composted."
+    } else {
+        responseText.innerText = "This should be placed in the trash."
+    }
+
+    responseDiv.appendChild(responseHeader)
+    responseDiv.appendChild(responseText)
+    
+    //confirm what comes back from guessInfo once form is complete
+    if (guessSection.note) {
+        const responseNote = document.createElement("p")
+        responseNote.innerText = guessSection.note
+        responseDiv.appendChild(responseNote)
+    }
+
+    guessDiv.appendChild(responseDiv)
+}
+
+function createHomePage() {
+    buildLoginButton();
+    buildSignupButton();   
+}
 
 function deleteChildren(parent) {
     let child = parent.lastElementChild;
@@ -449,3 +555,99 @@ function deleteChildren(parent) {
     }
 }
 
+function autocomplete(inp, arr) {
+    /*the autocomplete function takes two arguments,
+    the text field element and an array of possible autocompleted values:*/
+    var currentFocus;
+    /*execute a function when someone writes in the text field:*/
+    inp.addEventListener("input", function(e) {
+        var a, b, i, val = this.value;
+        /*close any already open lists of autocompleted values*/
+        closeAllLists();
+        if (!val) { return false;}
+        currentFocus = -1;
+        /*create a DIV element that will contain the items (values):*/
+        a = document.createElement("DIV");
+        a.setAttribute("id", this.id + "autocomplete-list");
+        a.setAttribute("class", "autocomplete-items");
+        /*append the DIV element as a child of the autocomplete container:*/
+        this.parentNode.appendChild(a);
+        /*for each item in the array...*/
+        for (i = 0; i < arr.length; i++) {
+          /*check if the item starts with the same letters as the text field value:*/
+          if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            /*create a DIV element for each matching element:*/
+            b = document.createElement("DIV");
+            /*make the matching letters bold:*/
+            b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+            b.innerHTML += arr[i].substr(val.length);
+            /*insert a input field that will hold the current array item's value:*/
+            b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+            /*execute a function when someone clicks on the item value (DIV element):*/
+            b.addEventListener("click", function(e) {
+                /*insert the value for the autocomplete text field:*/
+                inp.value = this.getElementsByTagName("input")[0].value;
+                /*close the list of autocompleted values,
+                (or any other open lists of autocompleted values:*/
+                closeAllLists();
+            });
+            a.appendChild(b);
+          }
+        }
+    });
+    /*execute a function presses a key on the keyboard:*/
+    inp.addEventListener("keydown", function(e) {
+        var x = document.getElementById(this.id + "autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+        if (e.keyCode == 40) {
+          /*If the arrow DOWN key is pressed,
+          increase the currentFocus variable:*/
+          currentFocus++;
+          /*and and make the current item more visible:*/
+          addActive(x);
+        } else if (e.keyCode == 38) { //up
+          /*If the arrow UP key is pressed,
+          decrease the currentFocus variable:*/
+          currentFocus--;
+          /*and and make the current item more visible:*/
+          addActive(x);
+        } else if (e.keyCode == 13) {
+          /*If the ENTER key is pressed, prevent the form from being submitted,*/
+          e.preventDefault();
+          if (currentFocus > -1) {
+            /*and simulate a click on the "active" item:*/
+            if (x) x[currentFocus].click();
+          }
+        }
+    });
+    function addActive(x) {
+      /*a function to classify an item as "active":*/
+      if (!x) return false;
+      /*start by removing the "active" class on all items:*/
+      removeActive(x);
+      if (currentFocus >= x.length) currentFocus = 0;
+      if (currentFocus < 0) currentFocus = (x.length - 1);
+      /*add class "autocomplete-active":*/
+      x[currentFocus].classList.add("autocomplete-active");
+    }
+    function removeActive(x) {
+      /*a function to remove the "active" class from all autocomplete items:*/
+      for (var i = 0; i < x.length; i++) {
+        x[i].classList.remove("autocomplete-active");
+      }
+    }
+    function closeAllLists(elmnt) {
+      /*close all autocomplete lists in the document,
+      except the one passed as an argument:*/
+      var x = document.getElementsByClassName("autocomplete-items");
+      for (var i = 0; i < x.length; i++) {
+        if (elmnt != x[i] && elmnt != inp) {
+          x[i].parentNode.removeChild(x[i]);
+        }
+      }
+    }
+    /*execute a function when someone clicks in the document:*/
+    document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
+    });
+  }
