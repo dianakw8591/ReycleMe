@@ -69,16 +69,8 @@ function makeThePage() {
     deleteChildren(header);
     addHeaderTitle();
     //all the functions go in here
-<<<<<<< HEAD
-    autocomplete(document.getElementById("myInput"), recyclables);
-    //logout button
-    //edit button
-    //delete button
-    //stats 
-=======
-    //item search function
+    buildItemForm();
     
->>>>>>> b1dcbe40ff96f0aa1050bc9037963d7fcef98266
 
     buildUserEditForm();
     buildUserDeleteAction();
@@ -458,39 +450,48 @@ const searchForm = document.createElement("form")
     pickType.innerHTML = "What category does this item fit into?"
     const kinds = document.createElement("div")
     kinds.id=kinds
+    const recy = document.createElement("input")
+    recy.setAttribute("type", "radio");
+    recy.label = "Recycling"
+    recy.id="recycling"
+    recy.name="general_type"
+    recy.value="recycling"
+    const rLabel = document.createElement("label")
+    rLabel.innerHTML = "Recycling"
+    const garb = document.createElement("input")
+    garb.setAttribute("type", "radio");
+    garb.id="garbage"
+    garb.name="general_type"
+    garb.value="garbage"
+    const gLabel = document.createElement("label")
+    gLabel.innerHTML = "Garbage"
+    const comp = document.createElement("input")
+    comp.setAttribute("type", "radio");
+    comp.id="compost"
+    comp.name="general_type"
+    comp.value="compost"
+    const cLabel = document.createElement("label")
+    cLabel.innerHTML = "Compost"
+    const br = document.createElement("br")
+    const br2 = document.createElement("br")
+
+    searchForm.appendChild(header)
+    searchForm.appendChild(searchLabel)
+    searchForm.appendChild(searchField)
+    searchForm.appendChild(searchSubmit)
+    searchForm.appendChild(pickType)
+    kinds.appendChild(recy)
+    kinds.appendChild(rLabel)
+    kinds.appendChild(br)
+    kinds.appendChild(garb)
+    kinds.appendChild(gLabel)
+    kinds.appendChild(br2)
+    kinds.appendChild(comp)
+    kinds.appendChild(cLabel)
+    searchForm.appendChild(kinds)
+    search.appendChild(searchForm)
 }
 
-<<<<<<< HEAD
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function createHomePage() {
-    user_id = null;
-    deleteChildren(search);
-    deleteChildren(stats);
-    deleteChildren(footer);
-    deleteChildren(results);
-    stats.style.display = 'none';
-    footer.style.display = 'none'
-    addHeaderTitle();
-    buildLoginButton();
-    buildSignupButton();   
-    
-}
-=======
->>>>>>> b1dcbe40ff96f0aa1050bc9037963d7fcef98266
 
 function deleteChildren(parent) {
     let child = parent.lastElementChild;
