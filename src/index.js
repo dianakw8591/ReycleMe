@@ -55,12 +55,29 @@ function createHomePage() {
 }
 
 function addHeaderTitle() {
+    const div1 = document.createElement('div')
+    div1.className = "col col-md-1";
+    header.appendChild(div1);
+
+    const image = document.createElement('img');
+    image.src = './rails-api/public/recycling-logo-png-transparent.png';
+    div1.appendChild(image);
+
+    const div2 = document.createElement('div')
+    div2.className = "col col-md-11";
+    header.appendChild(div2);
+
     const title = document.createElement('h2');
-    title.innerText = 'Welcome to RecycleMe';
-    header.appendChild(title);
-    const div = document.createElement('div');
-    div.className ='header-buttons';
-    header.appendChild(div);
+    title.innerText = 'Welcome to RecycleMe Seattle';
+    div2.appendChild(title);
+
+    const subtitle = document.createElement('h5');
+    subtitle.innerText = 'Do you know where it goes?'
+    div2.appendChild(subtitle);
+
+    const buttondiv = document.createElement('div');
+    buttondiv.className ='header-buttons';
+    div2.appendChild(buttondiv);
 }
 
 function makeThePage() {
@@ -524,11 +541,6 @@ function buildResponse(guessInfo) {
     }
 
     guessDiv.appendChild(responseDiv)
-}
-
-function createHomePage() {
-    buildLoginButton();
-    buildSignupButton();   
 }
 
 function deleteChildren(parent) {
