@@ -542,11 +542,6 @@ function buildResponse(guessInfo) {
     guessDiv.appendChild(responseDiv)
 }
 
-function createHomePage() {
-    buildLoginButton();
-    buildSignupButton();   
-}
-
 function deleteChildren(parent) {
     let child = parent.lastElementChild;
     while (child) {
