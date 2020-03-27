@@ -6,9 +6,11 @@
 
 ### Install
 * Clone this repo
+* Make sure that you have rails and postgresql installed
 * run ```bundle install```
 * run ```open index.html```
 * run ```cd rails-api```
+* run ```rails db:create```
 * run ```rails db:migrate```
 * run ```rails db:seed```
 * run ```rails s```
