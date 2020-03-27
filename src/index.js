@@ -436,10 +436,10 @@ function showStats(data) {
     h1.innerText = "Score:"
 
     const correctcount = document.createElement("h3");
-    correctcount.innerText = `Correct: ${data.correct}`;
+    correctcount.innerText = `${data.correct} ⭐`;
 
     const incorrectcount = document.createElement("h3");
-    incorrectcount.innerText = `Incorrect: ${data.incorrect}`;
+    incorrectcount.innerText = ` ${data.incorrect} ❌`;
 
     
     analyticsBox.appendChild(h1);
