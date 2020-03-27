@@ -6,20 +6,26 @@
     grid-row-gap: 0px;
     width: 100vw;
     height: 100vh;
+    font-family: monospace;
     }
     
 .header { 
     grid-area: 1 / 1 / 3 / 5;
     background-color: green; }
 
-h2 {
+h2, h5 {
     padding: 10px;
-    font-family: monospace;
+    text-align: center;
+}
+
+img {
+    width: 150px;
+    padding: 10px;
 }
 
 button {
     border-radius: 8px;
-    font-size: 18px;
+    font-size: 12px;
     background-color: rgba(148, 148, 148, 0.966);
 }
 
@@ -38,7 +44,7 @@ button {
 
 .search { grid-area: 3 / 2 / 5 / 5; }
 
-.results { grid-area: 3 / 2 / 5 / 5;  }
+.results { grid-area: 5 / 2 / 7 / 5;  }
 
 .footer { grid-area: 7 / 1 / 8 / 5;  
         background-color: rgb(160, 146, 100);
