@@ -55,12 +55,29 @@ function createHomePage() {
 }
 
 function addHeaderTitle() {
+    const div1 = document.createElement('div')
+    div1.className = "col col-md-1";
+    header.appendChild(div1);
+
+    const image = document.createElement('img');
+    image.src = './rails-api/public/recycling-logo-png-transparent.png';
+    div1.appendChild(image);
+
+    const div2 = document.createElement('div')
+    div2.className = "col col-md-11";
+    header.appendChild(div2);
+
     const title = document.createElement('h2');
-    title.innerText = 'Welcome to RecycleMe';
-    header.appendChild(title);
-    const div = document.createElement('div');
-    div.className ='header-buttons';
-    header.appendChild(div);
+    title.innerText = 'Welcome to RecycleMe Seattle';
+    div2.appendChild(title);
+
+    const subtitle = document.createElement('h5');
+    subtitle.innerText = 'Do you know where it goes?'
+    div2.appendChild(subtitle);
+
+    const buttondiv = document.createElement('div');
+    buttondiv.className ='header-buttons';
+    div2.appendChild(buttondiv);
 }
 
 function makeThePage() {
@@ -301,7 +318,6 @@ function addUserDiv(json) {
 
 
 function buildUserEditForm() {
-    //const editDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
     const editButton = document.createElement("button");
     editButton.innerText = "Edit"
     editButton.addEventListener("click", function() {
@@ -354,13 +370,13 @@ function editUser(event, editForm) {
             errorDiv.innerText = json.message;
         } else {
             search.removeChild(editForm);
+            buildItemForm();
             document.getElementById("userDiv").innerText = `Welcome ${json.data.attributes.username}!`;
         }
     })
 }
 
 function buildUserDeleteAction () {
-    // const deleteDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
     const deleteButton = document.createElement("button")
     deleteButton.innerText = "Delete"
     deleteButton.addEventListener("click", function() {
@@ -381,7 +397,6 @@ function deleteUser() {
 } 
 
 function buildUserLogout() {
-    // const deleteDiv = document.getElementById("INPUT CORRECT ELEMENT ID")
     const logoutButton = document.createElement("button")
     logoutButton.innerText = "Logout"
     logoutButton.addEventListener("click", function() {
@@ -492,6 +507,41 @@ const searchForm = document.createElement("form")
     search.appendChild(searchForm)
 }
 
+function buildResponse(guessInfo) {
+    const guessDiv = getElementById("INPUT CORRECT ID") //get appropraite element from form once complete
+    const responseDiv = document.createElement("div")
+    const responseHeader = document.createElement("h3")
+    
+    //confirm what comes back from guessInfo once form is complete
+    if (guessInfo["data"]["attributes"].correct == true) {
+        responseHeader.innerText = "You got it right!"
+    } else { 
+        responseHeader.innerText = "Not quite. Try again next time!"
+    }
+    
+    //confirm what comes back from guessInfo once form is complete
+    const guessSection = guessInfo["included"][0]["attributes"]
+    const responseText = document.createElement("p")
+    if (guessSection.general_type == "recycling") {
+        responseText.innerText = "This item can be recycled."
+    } else if (guessSection.general_type == "compost") {
+        responseText.innerText = "This item can be composted."
+    } else {
+        responseText.innerText = "This should be placed in the trash."
+    }
+
+    responseDiv.appendChild(responseHeader)
+    responseDiv.appendChild(responseText)
+    
+    //confirm what comes back from guessInfo once form is complete
+    if (guessSection.note) {
+        const responseNote = document.createElement("p")
+        responseNote.innerText = guessSection.note
+        responseDiv.appendChild(responseNote)
+    }
+
+    guessDiv.appendChild(responseDiv)
+}
 
 function deleteChildren(parent) {
     let child = parent.lastElementChild;
