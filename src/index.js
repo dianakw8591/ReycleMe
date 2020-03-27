@@ -337,6 +337,7 @@ function buildUserEditForm() {
         editForm.appendChild(editSubmit)
         editForm.appendChild(errorMessage)
         deleteChildren(search);
+        deleteChildren(results)
         search.appendChild(editForm)
         editForm.addEventListener("submit", function(event) {
             event.preventDefault();
