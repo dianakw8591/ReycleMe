@@ -44,7 +44,7 @@ button {
 
 .search { grid-area: 3 / 2 / 5 / 5; }
 
-.results { grid-area: 3 / 2 / 5 / 5;  }
+.results { grid-area: 5 / 2 / 7 / 5;  }
 
 .footer { grid-area: 7 / 1 / 8 / 5;  
         background-color: rgb(160, 146, 100);

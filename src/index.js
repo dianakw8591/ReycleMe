@@ -433,18 +433,23 @@ function showStats(data) {
 
     const correctcount = document.createElement("h3");
     correctcount.id = "correct_id"
-    correctcount.innerText = `${data.correct} ⭐`;
+    
 
     const incorrectcount = document.createElement("h3");
-    incorrectcount.innerText = ` ${data.incorrect} ❌`;
     incorrectcount.id = "incorrect_id"
-
     
     analyticsBox.appendChild(h1);
     analyticsBox.appendChild(correctcount);
     analyticsBox.appendChild(incorrectcount);
 
     stats.appendChild(analyticsBox);
+
+    inputStatNumbers(data.correct, data.incorrect)
+}
+
+function inputStatNumbers(correct, incorrect) {
+    document.getElementById("correct_id").innerText = `${correct} ⭐`
+    document.getElementById("incorrect_id").innerText = `${incorrect} ❌`
 }
 
 
@@ -479,6 +484,7 @@ function buildItemForm() {
             json.data.map(object => addItemToDropDown(object, searchMenu)) 
 
         });
+    searchMenu.name = "searchMenu"
 
 
 
@@ -531,16 +537,16 @@ function buildItemForm() {
 
     searchForm.addEventListener("submit", function(event){
         event.preventDefault();
+        console.log(event.target.select)
         createGuess(event)
     })
 }
 
 function createGuess(event) {
-    const input = event.target.searchItem.value
+    const input = event.target.searchMenu.value
     const radioButtonSelection = event.target.general_type.value
-    const item_id = 1 //ADD IN ITEM ID ONCE WE HAVE IT
     const guess = {"guess": {
-        "user_id": `${user_id}`, "item_id": `${item_id}`, "guessed_category": `${radioButtonSelection}`
+        "user_id": `${user_id}`, "item_id": `${input}`, "guessed_category": `${radioButtonSelection}`
         }
     }
     fetch(BASE_URL + "guesses", {
@@ -560,18 +566,19 @@ function createGuess(event) {
 }
 
 function buildResponse(guessInfo) {
-    const searchDiv = document.getElementById('search_div') 
     const responseDiv = document.createElement("div")
     const responseHeader = document.createElement("h4")
     
     if (guessInfo["data"]["attributes"].correct == true) {
         responseHeader.innerText = "You got it right!"
-        let numToIncrease = document.getElementById("correct_id").innerText.split(" ")[1]
-        document.getElementById("correct_id").innerText = "Correct: " + (parseInt(numToIncrease) +1)
+        let numToIncrease = document.getElementById("correct_id").innerText.split(" ")[0]
+        let inncorrectCount = document.getElementById("incorrect_id").innerText.split(" ")[0]
+        inputStatNumbers(parseInt(numToIncrease) +1, inncorrectCount)
     } else { 
         responseHeader.innerText = "Not quite. Try again next time!"
-        let numToIncrease = document.getElementById("incorrect_id").innerText.split(" ")[1]
-        document.getElementById("incorrect_id").innerText = "Incorrect: " + (parseInt(numToIncrease) +1)
+        let numToIncrease = document.getElementById("incorrect_id").innerText.split(" ")[0]
+        let correctCount = document.getElementById("correct_id").innerText.split(" ")[0]
+        inputStatNumbers(correctCount, parseInt(numToIncrease) +1)
     }
     
     const guessSection = guessInfo["included"][0]["attributes"]
@@ -593,7 +600,8 @@ function buildResponse(guessInfo) {
         responseDiv.appendChild(responseNote)
     }
 
-    searchDiv.appendChild(responseDiv)
+    deleteChildren(results)
+    results.appendChild(responseDiv)
 }
 
 function deleteChildren(parent) {
