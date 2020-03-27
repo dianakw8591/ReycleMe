@@ -6,6 +6,15 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+require 'watir'
+
+browser = Watir::Browser.new
+
+browser.goto('https://www.seattle.gov/utilities/services/where-does-it-go#/a-z')
+list = browser.element(css: 'ul.aToZList')
+    puts list
+#.each { |a| puts a['href'] }
+
 Item.delete_all
 Item.reset_pk_sequence
 
