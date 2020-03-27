@@ -1,7 +1,7 @@
 const BASE_URL = "http://localhost:3000/api/v1/"
 const LOGIN_URL = BASE_URL + "login"
 const SIGNUP_URL = BASE_URL + "users"
-const ITEMS_URL = "PLACE URL HERE";
+const ITEMS_URL = BASE_URL + "items";
 const STATS_URL = "PLACE URL HERE";
 const USERS_URL = "PLACE URL HERE";
 
@@ -449,6 +449,18 @@ function showStats(data) {
     stats.appendChild(analyticsBox);
 }
 
+
+function addItemToDropDown(object, parent){
+    const opt=document.createElement("option")
+    opt.value = object.id
+    opt.innerHTML = object.attributes.name
+    parent.appendChild(opt)
+}
+
+//  <option value="volvo">Volvo</option>
+
+
+
 function buildItemForm() {
 const searchForm = document.createElement("form")
     searchForm.setAttribute("method", "patch");
@@ -456,15 +468,28 @@ const searchForm = document.createElement("form")
     header.innerText = "What do you want to recycle"
     const searchLabel = document.createElement("label")
     searchLabel.innerText = "Type it here :"
-    const searchField = document.createElement("input")
-    searchField.name = "searchItem"
+
+
+    // const searchField = document.createElement("input")
+    // searchField.name = "searchItem"
+    const searchMenu = document.createElement("select")
+        fetch(ITEMS_URL)
+        .then(function(res) {
+            return res.json();
+        })
+        .then(function(json) {
+            json.data.map(object => addItemToDropDown(object, searchMenu)) 
+
+        });
+
+
+
     const searchSubmit = document.createElement("button")
     searchSubmit.type = "submit"
     searchSubmit.innerText = "Submit"
     const pickType = document.createElement("h4")
     pickType.innerHTML = "What category does this item fit into?"
     const kinds = document.createElement("div")
-    kinds.id=kinds
     const recy = document.createElement("input")
     recy.setAttribute("type", "radio");
     recy.label = "Recycling"
@@ -492,12 +517,12 @@ const searchForm = document.createElement("form")
 
     searchForm.appendChild(header)
     searchForm.appendChild(searchLabel)
-    searchForm.appendChild(searchField)
+    searchForm.appendChild(searchMenu)
     searchForm.appendChild(searchSubmit)
     searchForm.appendChild(pickType)
     kinds.appendChild(recy)
     kinds.appendChild(rLabel)
-     kinds.appendChild(br)
+    kinds.appendChild(br)
     kinds.appendChild(garb)
     kinds.appendChild(gLabel)
     kinds.appendChild(br2)
