@@ -3,6 +3,7 @@
 ### Features
 * Improve your skills at recycling! 
 * Track your progress over time!
+* View the demo [here](https://youtu.be/Cky8AVQdQiA)
 
 ### Install
 * Clone this repo
@@ -25,6 +26,8 @@
 
 ![](images/Main_screen.png)
 
+### Authors
+Built by Diana Wendt, Chris Wagstaffe, Lief Friedrichs and Matt Milton.
 
 #### License [MIT](https://en.wikipedia.org/wiki/MIT_License)
 
